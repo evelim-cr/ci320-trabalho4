@@ -1,0 +1,385 @@
+<!doctype html>
+<html>
+<head>
+<title>Trabalho 4</title>
+<link rel="stylesheet" type="text/css" href="estilo.css">
+<script type="text/javascript">
+
+	//constantes
+	var URL = "alunos.xml";
+	var COR_APROVADO = "green"	
+	var COR_REPROVADO = "red";
+	var COR_MATRICULADO = "blue";
+	var COR_EQUIVALENCIA = "yellow";	
+	var COR_NAO_CURSOU_DISCIPLINA = "white";
+
+	//variáveis globais
+	var gradeBCC = null;
+	var infoAluno = null;
+	var naoEncontradoDOM = null;
+	var gradeDOM = null;
+	var pequisaDOM = null;
+	
+	
+	
+	function inicializa(){
+		gradeBCC = [];
+		gradeBCC.push(configuraDisciplinaDOM("CI068"));
+		gradeBCC.push(configuraDisciplinaDOM("CI055"));
+		gradeBCC.push(configuraDisciplinaDOM("CM046"));
+		gradeBCC.push(configuraDisciplinaDOM("CM045"));
+		gradeBCC.push(configuraDisciplinaDOM("CM201"));
+		gradeBCC.push(configuraDisciplinaDOM("CI210"));
+		gradeBCC.push(configuraDisciplinaDOM("CI056"));
+		gradeBCC.push(configuraDisciplinaDOM("CI067"));
+		gradeBCC.push(configuraDisciplinaDOM("CM005"));
+		gradeBCC.push(configuraDisciplinaDOM("CM202"));
+		gradeBCC.push(configuraDisciplinaDOM("CI212"));
+		gradeBCC.push(configuraDisciplinaDOM("CI057"));
+		gradeBCC.push(configuraDisciplinaDOM("CI064"));
+		gradeBCC.push(configuraDisciplinaDOM("CI237"));
+		gradeBCC.push(configuraDisciplinaDOM("CI166"));
+		gradeBCC.push(configuraDisciplinaDOM("CI215"));
+		gradeBCC.push(configuraDisciplinaDOM("CI062"));
+		gradeBCC.push(configuraDisciplinaDOM("CE003"));
+		gradeBCC.push(configuraDisciplinaDOM("CI058"));
+		gradeBCC.push(configuraDisciplinaDOM("CI164"));
+		gradeBCC.push(configuraDisciplinaDOM("CI162"));
+		gradeBCC.push(configuraDisciplinaDOM("CI065"));
+		gradeBCC.push(configuraDisciplinaDOM("CI059"));
+		gradeBCC.push(configuraDisciplinaDOM("CI061"));
+		gradeBCC.push(configuraDisciplinaDOM("SA214"));
+		gradeBCC.push(configuraDisciplinaDOM("CI163"));
+		gradeBCC.push(configuraDisciplinaDOM("CI165"));
+		gradeBCC.push(configuraDisciplinaDOM("CI209"));
+		gradeBCC.push(configuraDisciplinaDOM("CI218"));
+		gradeBCC.push(configuraDisciplinaDOM("CI220"));
+		gradeBCC.push(configuraDisciplinaDOM("CI221"));
+		gradeBCC.push(configuraDisciplinaDOM("CI211"));
+		
+		naoEncontradoDOM = document.getElementById('naoencontrado');
+		naoEncontradoDOM.style.display = "none";
+		gradeDOM = document.getElementById('grade');
+		gradeDOM.style.display = "none";
+		
+		pequisaDOM = document.getElementById('pesquisa');
+	}
+	
+	
+	function configuraDisciplinaDOM(codDisc){
+		var discDOM = new Object();
+		discDOM.codigo = codDisc;
+		discDOM.objetoDOM = document.getElementById(codDisc);
+		discDOM.objetoDOM.onmousedown =function(e){
+			if (e.which == 1) { //botao da esquerda
+				mostrarUltimoMatriculaDisciplina(codDisc);
+			}else
+			if (e.which == 3) { //botao da direita
+				mostrarHistoricoDisciplina(codDisc);
+			}
+		}
+		return discDOM;
+	}
+	
+	
+	function mostrarHistoricoDisciplina(codDisc){
+		var disc = encontraDisciplinaNoInfoAluno(codDisc);
+		if (disc == null) {
+			alert("Disciplina não cursada!");
+		} else {			
+			var html = "<p>" + disc.nome + " (" + disc.codigo + ")" +"</p>";			
+			html = html + "<table>";
+			html = html + "<tr><th>Período</th><th>Nota</th><th>Frequência</th><th>Situação</th></tr>";
+			var hist = disc.hist;
+			for (var i=0; i<hist.length;i++) {
+				html = html + "<tr>"
+				                   + "<td>"+ hist[i].periodo + "/" +  hist[i].ano +"</td>"
+								   + "<td>"+ hist[i].nota +"</td>"
+								   + "<td>"+ hist[i].frequencia +"</td>"
+								   + "<td>"+ hist[i].situacao +"</td>"
+							+ "</tr>";
+			}
+			
+			html = html + "</table>";
+			showPopup(html,800,500);
+		}
+	}
+	
+	
+	
+	function mostrarUltimoMatriculaDisciplina(codDisc){
+		var disc = encontraDisciplinaNoInfoAluno(codDisc);
+		if (disc == null) {
+			alert("Disciplina não cursada!");
+		} else {
+			var matrMaisRecente = disc.hist[0];
+			var html = "<table>";
+			html = html + "<tr><th>Disciplina</th><td>"+ disc.nome + " (" + disc.codigo + ")" +"</td>";
+			html = html + "<tr><th>Período</th><td>"+ matrMaisRecente.periodo + "/" +  matrMaisRecente.ano +"</td>";
+			html = html + "<tr><th>Nota</th><td>"+ matrMaisRecente.nota +"</td>";
+			html = html + "<tr><th>Frequência</th><td>"+ matrMaisRecente.frequencia +"</td>";			
+			html = html + "<tr><th>Situação</th><td>"+ matrMaisRecente.situacao +"</td>";
+			html = html + "</table>";
+			showPopup(html,800,250);
+		}
+	}
+
+
+
+	function showPopup(html,width,height){
+		var popup = window.open("","Popup","width="+width+",height="+height);
+		popup.document.write('<link rel="stylesheet" type="text/css" href="estilo.css">' + html);
+	}
+	
+		
+	function carrega(grr){
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			{
+				var regs = [];
+				var nodosAlunos = xmlhttp.responseXML.documentElement.getElementsByTagName("ALUNO");
+				for (var i=0; i<nodosAlunos.length; i++) {
+					if (nodosAlunos[i].getElementsByTagName("MATR_ALUNO")[0].firstChild.nodeValue == grr) {
+						var reg = new Object();
+						reg.ano        = nodosAlunos[i].getElementsByTagName("ANO")[0].firstChild.nodeValue;
+						reg.periodo    = nodosAlunos[i].getElementsByTagName("PERIODO")[0].firstChild.nodeValue;
+						reg.situacao   = nodosAlunos[i].getElementsByTagName("SITUACAO")[0].firstChild.nodeValue;
+						reg.frequencia = nodosAlunos[i].getElementsByTagName("FREQUENCIA")[0].firstChild.nodeValue;
+						reg.nota       = nodosAlunos[i].getElementsByTagName("MEDIA_FINAL")[0].firstChild.nodeValue;
+						reg.nomeDisc   = nodosAlunos[i].getElementsByTagName("NOME_ATIV_CURRIC")[0].firstChild.nodeValue;
+						reg.codDisc    = nodosAlunos[i].getElementsByTagName("COD_ATIV_CURRIC")[0].firstChild.nodeValue;
+						reg.nomeAluno  = nodosAlunos[i].getElementsByTagName("NOME_ALUNO")[0].firstChild.nodeValue;
+						regs.push(reg);
+					}
+				}				
+				carregarInfoAluno(regs);
+				atualizaObjetosDOM();
+			}
+		}
+		xmlhttp.open("GET",URL,true);
+		xmlhttp.send();
+	}
+	
+	
+	function carregarInfoAluno(regs){
+		if (regs.length == 0) {
+			infoAluno = null;
+		} else {
+			infoAluno = new Object();
+			infoAluno.nomeAluno   = regs[0].nomeAluno;
+			infoAluno.disciplinas = [];
+			for (var i=0; i<regs.length; i++) {
+				var reg = regs[i];
+				var disc = encontraDisciplinaNoInfoAluno(reg.codDisc);
+				if (disc == null) {
+					disc = new Object();
+					disc.codigo = reg.codDisc;
+					disc.nome = reg.nomeDisc;
+					disc.hist = [];
+					infoAluno.disciplinas.push(disc);
+				}
+				var matricula = new Object();
+				matricula.ano = reg.ano;
+				matricula.periodo = reg.periodo;
+				matricula.situacao = reg.situacao;
+				matricula.frequencia = reg.frequencia;
+				matricula.nota = reg.nota;
+				disc.hist.push(matricula);
+				disc.hist = ordenarHistoricoDescendente(disc.hist);
+			}			
+		}
+	}
+	
+	
+	
+	function ordenarHistoricoDescendente(historico){
+		var histOrdenado = [];
+		var matrNaoOrdenadas = criaCopiaVetor(historico);
+		for (var i=0;i<historico.length;i++){
+			var matrMaisRecente = maisRecenteMatricula(matrNaoOrdenadas);
+			histOrdenado.push(matrMaisRecente);
+			matrNaoOrdenadas = removeMatricula(matrMaisRecente, matrNaoOrdenadas);
+		}	
+		return histOrdenado;
+	}
+	
+	function removeMatricula(matrMaisRecente, matrNaoOrdenadas){
+		var novoVetor = [];
+		for (var i=0;i<matrNaoOrdenadas.length;i++) {
+			var matrComparar = matrNaoOrdenadas[i];
+			if (valorComparacao(matrComparar) != valorComparacao(matrMaisRecente)) {
+				novoVetor.push(matrComparar);
+			}
+		}
+		return novoVetor;	
+	}
+	
+	
+	function maisRecenteMatricula(historico){
+		var maisRecente = historico[0];
+		for (var i=1;i<historico.length;i++) {
+			var matrComparar = historico[i];
+			if (valorComparacao(matrComparar) > valorComparacao(maisRecente)) {
+				maisRecente = matrComparar;
+			}
+		}
+		return maisRecente;
+	}
+	
+	
+	function criaCopiaVetor(vetor){
+		var copia = [];
+		for (var i=0;i<vetor.length;i++) {
+			copia.push(vetor[i]);
+		}
+		return copia;
+	}
+	
+	
+	function valorComparacao(matricula){
+		var per = 1;
+		if (matricula.periodo == "2o. Semestre") {
+			per = 2;
+		}
+		return (matricula.ano * 10) + per;
+	}
+	
+	function encontraDisciplinaNoInfoAluno(codDisc){
+		var disciplinas = infoAluno.disciplinas;
+		for (var i=0; i<disciplinas.length; i++) {
+			if (disciplinas[i].codigo == codDisc) {
+				return disciplinas[i];
+			}
+		}
+		return null;
+	}
+	
+	
+	function atualizaObjetosDOM(){
+		if (infoAluno == null) {
+			naoEncontradoDOM.style.display = "block";
+			gradeDOM.style.display = "none";
+		} else {
+			naoEncontradoDOM.style.display = "none";
+			gradeDOM.style.display = "block";
+			
+			for (var i=0; i<gradeBCC.length; i++) {
+				var discGrade = gradeBCC[i];
+				var discInfo = encontraDisciplinaNoInfoAluno(discGrade.codigo);
+				if (discInfo == null) {
+					//nunca cursou a disciplina
+					discGrade.objetoDOM.style.backgroundColor = COR_NAO_CURSOU_DISCIPLINA;
+				} else {
+					var sit = discInfo.hist[0].situacao;
+					if ((sit == "Reprovado por Frequência") || (sit == "Reprovado por nota")){
+						discGrade.objetoDOM.style.backgroundColor = COR_REPROVADO;
+					} else
+					if (sit == "Aprovado") {
+						discGrade.objetoDOM.style.backgroundColor = COR_APROVADO;
+					} else
+					if (sit == "Equivalência de Disciplina") {
+						discGrade.objetoDOM.style.backgroundColor = COR_EQUIVALENCIA;
+					} else
+					if (sit == "Matrícula") {
+						discGrade.objetoDOM.style.backgroundColor = COR_MATRICULADO;
+					} else { //considera como se não tivesse cursado a disciplina
+						discGrade.objetoDOM.style.backgroundColor = COR_NAO_CURSOU_DISCIPLINA;
+					}
+				}
+			}
+		}
+	}
+		
+	
+	function consulta(){
+		var grr = pequisaDOM.value;
+		if (grr == "") {
+			alert("Informe o RA do aluno!");
+		} else {
+			carrega(grr);		
+		}		
+	}
+	
+</script>
+
+</head>
+<body>
+	<div>
+		RA:<input id="pesquisa"></input>
+		<button onclick="consulta()">Consultar</button>
+	</div>
+	<div id="conteudo">	
+		<div id="naoencontrado">
+			<p>Aluno não encontrado!<p>
+		</div>
+		<div id="grade">
+			<table>
+				<tr>
+					<th>1º Período</th>
+					<th>2º Período</th>
+					<th>3º Período</th>
+					<th>4º Período</th>
+					<th>5º Período</th>
+					<th>6º Período</th>
+					<th>7º Período</th>
+					<th>8º Período</th>					
+				</tr>
+				<tr>
+					<td id="CI068">CI068</td>
+					<td id="CI210">CI210</td>
+					<td id="CI212">CI212</td>
+					<td id="CI215">CI215</td>
+					<td id="CI162">CI162</td>
+					<td id="CI163">CI163</td>
+					<td id="CI221">CI221</td>
+					<td>---</td>					
+				</tr>
+				<tr>
+					<td id="CI055">CI055</td>
+					<td id="CI056">CI056</td>
+					<td id="CI057">CI057</td>
+					<td id="CI062">CI062</td>
+					<td id="CI065">CI065</td>
+					<td id="CI165">CI165</td>
+					<td id="CI211">CI211</td>
+					<td>---</td>					
+				</tr>	
+				<tr>
+					<td id="CM046">CM046</td>
+					<td id="CI067">CI067</td>
+					<td id="CI064">CI064</td>
+					<td id="CE003">CE003</td>
+					<td id="CI059">CI059</td>
+					<td id="CI209">CI209</td>
+					<td>---</td>
+					<td>---</td>					
+				</tr>	
+				<tr>
+					<td id="CM045">CM045</td>
+					<td id="CM005">CM005</td>
+					<td id="CI237">CI237</td>
+					<td id="CI058">CI058</td>
+					<td id="CI061">CI061</td>
+					<td id="CI218">CI218</td>
+					<td>---</td>
+					<td>---</td>					
+				</tr>
+				<tr>
+					<td id="CM201">CM201</td>
+					<td id="CM202">CM202</td>
+					<td id="CI166">CI166</td>
+					<td id="CI164">CI164</td>
+					<td id="SA214">SA214</td>
+					<td id="CI220">CI220</td>
+					<td>---</td>
+					<td>---</td>					
+				</tr>				
+			</table>
+		</div>
+	</div>
+	<script>
+		inicializa();	
+	</script>	
+</body>
+</html>
