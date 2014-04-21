@@ -1,0 +1,142 @@
+#tot{
+        display:block;
+        width:auto;
+        height:110px;
+        margin: 0 auto;
+}
+
+body.fundo{
+
+        background-image: url("madeirab.jpg");
+}
+main{
+        display:block;
+        margin: 0 auto;
+        height: 900px;
+        width: 1100px;
+
+}
+p.nome{
+        display:block;
+        color:rgb(0,0, 0);
+        font-size:18px;
+        margin: 20px;
+}
+
+h1.titulo{
+        display:block;
+        color:rgb(192, 108, 213);
+        font-size:27px;
+        text-align: center;
+}
+
+h1.subtitulo{
+        display:block;
+        color:rgb(202, 128, 233);
+        font-size:20px;
+        margin: 20px;
+}
+a.link{
+        display:block;
+        text-decoration: none;
+        font-size:20px;
+        margin-top:10px;
+        margin-left:40px;
+        color:rgb(202, 128, 233);
+
+}
+
+a.linkMaterias{
+        display:block;
+        text-decoration: none;
+        font-size:20px;
+        margin-top:10px;
+        margin-left:40px;
+
+
+
+}
+
+a.link:link {color:purple;}
+a.link:visited {color:rgb(202, 128, 233);}
+a.linkMaterias:link {color:black;}
+a.linkMaterias:visited {color:gray;}
+header{
+        width: 1025px;
+        height: 170px;
+        padding: 0.5em;
+        border: 10px ridge rgb(147,112,219);
+        background-color: rgba(236, 240, 241,0.7);
+}
+.nav{
+        float: left;
+        width: 200px;
+        height: 500px;
+        background-color: rgba(236, 240, 241,0.7);
+        border:10px ridge rgb(147,112,219);
+}
+
+.conteudo{
+        margin-left: 20px;
+        float: left;
+        width: 802px;
+        height:500px;
+        background-color: rgba(236, 240, 241,0.7);
+        border: 10px ridge rgb(147,112,219);
+
+}
+
+.section{
+        display:block;
+        margin: 40px;
+        margin-top:80px;
+}
+
+.rodape{
+        display:block;
+        margin-top:550px;
+        text-align: center;
+
+}
+
+.footer{
+        display:block;
+        margin-top:310px;
+        text-align: center;
+}
+
+.grr{
+        display:block;
+        margin-top:200px;
+
+}
+
+td
+{
+        margin:0px;
+        border:1px solid; 
+}
+th
+{
+        margin:0px;
+        border:1px solid;
+        background-color:rgb(192, 108, 213);
+       
+}
+table.tab{
+
+        visibility:hidden; 
+}
+
+div.button{
+        display:block;
+        margin-left: 30px; 
+        font-size:18px; 
+}
+
+.corRed{
+        
+
+}
+
+
