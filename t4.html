@@ -1,7 +1,9 @@
 <!doctype html>
+
 <html>
 <head>
 <title>Trabalho 4</title>
+<meta charset="utf-8" />
 <link rel="stylesheet" type="text/css" href="estilo.css">
 <script type="text/javascript">
 
@@ -13,7 +15,7 @@
 	var COR_EQUIVALENCIA = "yellow";	
 	var COR_NAO_CURSOU_DISCIPLINA = "white";
 
-	//variáveis globais
+	//variÃ¡veis globais
 	var gradeBCC = null;
 	var infoAluno = null;
 	var naoEncontradoDOM = null;
@@ -85,11 +87,11 @@
 	function mostrarHistoricoDisciplina(codDisc){
 		var disc = encontraDisciplinaNoInfoAluno(codDisc);
 		if (disc == null) {
-			alert("Disciplina não cursada!");
+			alert("Disciplina nÃ£o cursada!");
 		} else {			
 			var html = "<p>" + disc.nome + " (" + disc.codigo + ")" +"</p>";			
 			html = html + "<table>";
-			html = html + "<tr><th>Período</th><th>Nota</th><th>Frequência</th><th>Situação</th></tr>";
+			html = html + "<tr><th>PerÃ­odo</th><th>Nota</th><th>FrequÃªncia</th><th>SituaÃ§Ã£o</th></tr>";
 			var hist = disc.hist;
 			for (var i=0; i<hist.length;i++) {
 				html = html + "<tr>"
@@ -110,15 +112,15 @@
 	function mostrarUltimoMatriculaDisciplina(codDisc){
 		var disc = encontraDisciplinaNoInfoAluno(codDisc);
 		if (disc == null) {
-			alert("Disciplina não cursada!");
+			alert("Disciplina nÃ£o cursada!");
 		} else {
 			var matrMaisRecente = disc.hist[0];
 			var html = "<table>";
 			html = html + "<tr><th>Disciplina</th><td>"+ disc.nome + " (" + disc.codigo + ")" +"</td>";
-			html = html + "<tr><th>Período</th><td>"+ matrMaisRecente.periodo + "/" +  matrMaisRecente.ano +"</td>";
+			html = html + "<tr><th>PerÃ­odo</th><td>"+ matrMaisRecente.periodo + "/" +  matrMaisRecente.ano +"</td>";
 			html = html + "<tr><th>Nota</th><td>"+ matrMaisRecente.nota +"</td>";
-			html = html + "<tr><th>Frequência</th><td>"+ matrMaisRecente.frequencia +"</td>";			
-			html = html + "<tr><th>Situação</th><td>"+ matrMaisRecente.situacao +"</td>";
+			html = html + "<tr><th>FrequÃªncia</th><td>"+ matrMaisRecente.frequencia +"</td>";			
+			html = html + "<tr><th>SituaÃ§Ã£o</th><td>"+ matrMaisRecente.situacao +"</td>";
 			html = html + "</table>";
 			showPopup(html,800,250);
 		}
@@ -163,11 +165,9 @@
 	
 	
 	function carregarInfoAluno(regs){
-		if (regs.length == 0) 
-		{
+		if (regs.length == 0) {
 			infoAluno = null;
-		} else
-		{
+		} else {
 			infoAluno = new Object();
 			infoAluno.nomeAluno   = regs[0].nomeAluno;
 			infoAluno.disciplinas = [];
@@ -274,18 +274,18 @@
 					discGrade.objetoDOM.style.backgroundColor = COR_NAO_CURSOU_DISCIPLINA;
 				} else {
 					var sit = discInfo.hist[0].situacao;
-					if ((sit == "Reprovado por Frequência") || (sit == "Reprovado por nota")){
+					if ((sit == "Reprovado por FrequÃªncia") || (sit == "Reprovado por nota")){
 						discGrade.objetoDOM.style.backgroundColor = COR_REPROVADO;
 					} else
 					if (sit == "Aprovado") {
 						discGrade.objetoDOM.style.backgroundColor = COR_APROVADO;
 					} else
-					if (sit == "Equivalência de Disciplina") {
+					if (sit == "EquivalÃªncia de Disciplina") {
 						discGrade.objetoDOM.style.backgroundColor = COR_EQUIVALENCIA;
 					} else
-					if (sit == "Matrícula") {
+					if (sit == "MatrÃ­cula") {
 						discGrade.objetoDOM.style.backgroundColor = COR_MATRICULADO;
-					} else { //considera como se não tivesse cursado a disciplina
+					} else { //considera como se nÃ£o tivesse cursado a disciplina
 						discGrade.objetoDOM.style.backgroundColor = COR_NAO_CURSOU_DISCIPLINA;
 					}
 				}
@@ -313,19 +313,19 @@
 	</div>
 	<div id="conteudo">	
 		<div id="naoencontrado">
-			<p>Aluno não encontrado!<p>
+			<p>Aluno nÃ£o encontrado!<p>
 		</div>
 		<div id="grade">
 			<table>
 				<tr>
-					<th>1º Período</th>
-					<th>2º Período</th>
-					<th>3º Período</th>
-					<th>4º Período</th>
-					<th>5º Período</th>
-					<th>6º Período</th>
-					<th>7º Período</th>
-					<th>8º Período</th>					
+					<th>1Âº PerÃ­odo</th>
+					<th>2Âº PerÃ­odo</th>
+					<th>3Âº PerÃ­odo</th>
+					<th>4Âº PerÃ­odo</th>
+					<th>5Âº PerÃ­odo</th>
+					<th>6Âº PerÃ­odo</th>
+					<th>7Âº PerÃ­odo</th>
+					<th>8Âº PerÃ­odo</th>					
 				</tr>
 				<tr>
 					<td id="CI068">CI068</td>
