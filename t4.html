@@ -197,10 +197,12 @@
 	
 	function ordenarHistoricoDescendente(historico){
 		var histOrdenado = [];
+		
 		var matrNaoOrdenadas = criaCopiaVetor(historico);
 		for (var i=0;i<historico.length;i++){
 			var matrMaisRecente = maisRecenteMatricula(matrNaoOrdenadas);
 			histOrdenado.push(matrMaisRecente);
+			
 			matrNaoOrdenadas = removeMatricula(matrMaisRecente, matrNaoOrdenadas);
 		}	
 		return histOrdenado;
